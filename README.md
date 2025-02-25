@@ -1,6 +1,15 @@
 # XB SSO Package
 
-**My SSO Package** bu OAuth2 va PKCE (Proof Key for Code Exchange) bilan ishlaydigan SSO (Single Sign-On) autentifikatsiya paketi bo‘lib, React loyihalari uchun mo‘ljallangan.
+**XB SSO Package** bu OAuth2 va PKCE (Proof Key for Code Exchange) bilan ishlaydigan SSO (Single Sign-On) autentifikatsiya paketi bo‘lib, React loyihalari uchun mo‘ljallangan.
+
+---
+
+## ❗ Muhim ogohlantirish
+> **Ushbu paket faqat Xalq Banki SSO tizimi bilan ishlash uchun mo‘ljallangan.**  
+> **Boshqa tizimlarda to‘g‘ri ishlamasligi mumkin.**  
+> Agar siz boshqa autentifikatsiya xizmatlari bilan ishlashni xohlasangiz, **konfiguratsiyani mos ravishda o‘zgartirishingiz kerak**.
+
+---
 
 ## 🚀 Xususiyatlari:
 - ✅ **OAuth2 + PKCE** yordamida autentifikatsiya
