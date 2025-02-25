@@ -1,0 +1,53 @@
+{
+  "name": "xb-sso-oauth2",
+  "version": "1.0.1",
+  "description": "SSO Authentication package with OAuth2 and PKCE support",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "prepare": "npm run build",
+    "publish": "npm publish --access public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abdinazarov7799/xb-sso-oauth2.git"
+  },
+  "dependencies": {
+    "axios": "^1.5.0",
+    "crypto-js": "^4.1.1",
+    "jose": "^4.14.4",
+    "lodash": "^4.17.21",
+    "uuid": "^11.1.0"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.0 || >=18.0.0",
+    "react-dom": ">=17.0.0 || >=18.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@types/lodash": "^4.17.15",
+    "@types/react": "^19.0.10",
+    "rollup": "^3.27.0",
+    "rollup-plugin-typescript2": "^0.35.0",
+    "typescript": "^5.2.2"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "keywords": [
+    "xalq bank",
+    "xb technology",
+    "xb sso",
+    "sso",
+    "oauth2",
+    "jwt",
+    "react",
+    "authentication"
+  ],
+  "author": "XB Technology",
+  "license": "MIT"
+}
