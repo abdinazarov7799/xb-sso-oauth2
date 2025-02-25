@@ -1,4 +1,4 @@
-# My SSO Package
+# XB SSO Package
 
 **My SSO Package** bu OAuth2 va PKCE (Proof Key for Code Exchange) bilan ishlaydigan SSO (Single Sign-On) autentifikatsiya paketi bo‘lib, React loyihalari uchun mo‘ljallangan.
 
