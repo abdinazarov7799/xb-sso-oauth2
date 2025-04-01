@@ -1,6 +1,6 @@
 {
   "name": "xb-sso-oauth2",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "SSO Authentication package with OAuth2 and PKCE support",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

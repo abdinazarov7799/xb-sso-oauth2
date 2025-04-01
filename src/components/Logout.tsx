@@ -3,20 +3,30 @@ import { SSOConfig } from '../types';
 
 interface LogoutProps {
     config: SSOConfig;
+    token: string;
     setAuthenticated: (auth: boolean) => void;
     setToken: (token: string | null) => void;
-    onLogout?: () => void;
+    onSuccess?: () => void;
+    onError?: () => void;
 }
 
-const Logout: React.FC<LogoutProps> = ({ config, setAuthenticated, setToken, onLogout }) => {
+const Logout: React.FC<LogoutProps> = ({ config, setAuthenticated, setToken, onSuccess, onError, token }) => {
     useEffect(() => {
+        if (!token) {
+            setAuthenticated(false);
+            setToken(null);
+            localStorage.clear();
+            if (onSuccess) onSuccess();
+            return;
+        }
+
         const headers = {
             "Content-Type": "application/x-www-form-urlencoded",
             "Authorization": "Basic " + btoa(`${config.CLIENT_ID}:${config.CLIENT_SECRET}`)
         };
 
         const data = new URLSearchParams();
-        data.append("token", localStorage.getItem("accessToken") || "");
+        data.append("token", token);
 
         fetch(`${config.SERVER_ENDPOINT}/oauth2/revoke`, {
             method: "POST",
@@ -28,9 +38,12 @@ const Logout: React.FC<LogoutProps> = ({ config, setAuthenticated, setToken, onL
                 setAuthenticated(false);
                 setToken(null);
                 localStorage.clear();
-                if (onLogout) onLogout();
+                if (onSuccess) onSuccess();
             })
-            .catch(console.error);
+            .catch((err) => {
+                if (onError) onError();
+                else console.error(err);
+            });
     }, []);
 
     return null;
