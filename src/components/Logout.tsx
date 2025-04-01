@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
 import { SSOConfig } from '../types';
 
 interface LogoutProps {
@@ -13,14 +12,19 @@ const Logout: React.FC<LogoutProps> = ({ config, setAuthenticated, setToken, onL
     useEffect(() => {
         const headers = {
             "Content-Type": "application/x-www-form-urlencoded",
-            "Authorization": "Basic " + window.btoa(`${config.CLIENT_ID}:${config.CLIENT_SECRET}`)
+            "Authorization": "Basic " + btoa(`${config.CLIENT_ID}:${config.CLIENT_SECRET}`)
         };
 
         const data = new URLSearchParams();
         data.append("token", localStorage.getItem("accessToken") || "");
 
-        axios.post(`${config.SERVER_ENDPOINT}/oauth2/revoke`, data, { headers })
-            .then(() => {
+        fetch(`${config.SERVER_ENDPOINT}/oauth2/revoke`, {
+            method: "POST",
+            headers,
+            body: data
+        })
+            .then((res) => {
+                if (!res.ok) throw new Error("Failed to revoke token");
                 setAuthenticated(false);
                 setToken(null);
                 localStorage.clear();
@@ -29,7 +33,7 @@ const Logout: React.FC<LogoutProps> = ({ config, setAuthenticated, setToken, onL
             .catch(console.error);
     }, []);
 
-    return <></>;
+    return null;
 };
 
 export { Logout };

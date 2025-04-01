@@ -18,5 +18,5 @@ export default {
         }
     ],
     plugins: [resolve(), commonjs(), typescript()],
-    external: ["react", "react-dom", "axios", "jose"]
+    external: ["react", "react-dom", "jose"]
 };

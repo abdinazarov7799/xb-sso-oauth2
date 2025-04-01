@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { isEmpty, isEqual, get } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
-import axios from 'axios';
 import PKCEHelper from '../utils/PkceHelper';
 import storage from '../utils/storage';
-import { SSOConfig, SSOLoginProps } from '../types';
+import { SSOLoginProps } from '../types';
 import { JwtHelper } from '../utils/JwtHelper';
 
 const SSOLogin: React.FC<SSOLoginProps> = ({ setToken, setAuthenticated, onSuccess = () => {}, config, renderComponent }) => {
-    const typedConfig: SSOConfig = config;
     const [newWindow, setNewWindow] = useState<Window | null>(null);
     const [isWindowOpen, setIsWindowOpen] = useState(false);
     const [isSSOReady, setSSOReady] = useState(false);
@@ -24,20 +21,25 @@ const SSOLogin: React.FC<SSOLoginProps> = ({ setToken, setAuthenticated, onSucce
         const state = queryParams.get("state");
         const state_code = storage.get("state_code");
 
-        if (!isEmpty(code) && isEqual(state, state_code)) {
-            axios.post(config.OAUTH2_TOKEN_ENDPOINT, new URLSearchParams({
+        if (code && state === state_code) {
+            const body = new URLSearchParams({
                 grant_type: "authorization_code",
                 code,
                 redirect_uri: config.REDIRECT_URI,
-                code_verifier: storage.get("code_verifier")?.toString()
-            }), {
+                code_verifier: storage.get("code_verifier")?.toString() || ""
+            });
+
+            fetch(config.OAUTH2_TOKEN_ENDPOINT, {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
-                    "Authorization": `Basic ${window.btoa(`${config.CLIENT_ID}:${config.CLIENT_SECRET}`)}`
-                }
+                    "Authorization": `Basic ${btoa(`${config.CLIENT_ID}:${config.CLIENT_SECRET}`)}`
+                },
+                body
             })
-                .then(({ data }) => {
-                    const accessToken = get(data, 'access_token');
+                .then(res => res.json())
+                .then(data => {
+                    const accessToken = data?.access_token;
                     jwtHelper.verifyTokenIssAud(accessToken, config).then((res) => {
                         if (!res.valid) {
                             console.error("Invalid JWT");
@@ -57,7 +59,10 @@ const SSOLogin: React.FC<SSOLoginProps> = ({ setToken, setAuthenticated, onSucce
             return;
         }
 
-        if (["state_code", "code_verifier", "code_challenge"].every((key) => !isEmpty(storage.get(key))) && isEqual(storage.get("code_challenge_method"), "S256")) {
+        const hasPKCEParams = ["state_code", "code_verifier", "code_challenge"]
+            .every((key) => Boolean(storage.get(key)));
+
+        if (hasPKCEParams && storage.get("code_challenge_method") === "S256") {
             setSSOReady(true);
             return;
         }
@@ -88,7 +93,7 @@ const SSOLogin: React.FC<SSOLoginProps> = ({ setToken, setAuthenticated, onSucce
     }, [newWindow]);
 
     useEffect(() => {
-        if (isEmpty(window.opener) && !isEmpty(storage.get("accessToken"))) {
+        if (!window.opener && storage.get("accessToken")) {
             setToken(storage.get("accessToken"));
             setAuthenticated(true);
             storage.remove("accessToken");

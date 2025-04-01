@@ -13,15 +13,6 @@ export class JwtHelper {
         this.JWKS = createRemoteJWKSet(new URL(this.jwksUrl));
     }
 
-    async verifyJwt(token: string): Promise<{ valid: boolean; payload?: JWTPayload; error?: string }> {
-        try {
-            const { payload } = await jwtVerify(token, this.JWKS);
-            return { valid: true, payload };
-        } catch (error: any) {
-            return { valid: false, error: error.message };
-        }
-    }
-
     async verifyTokenIssAud(token: string, config: SSOConfig): Promise<{ valid: boolean; payload?: JWTPayload; error?: string }> {
         try {
             const { payload } = await jwtVerify(token, this.JWKS, {
