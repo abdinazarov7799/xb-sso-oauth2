@@ -17,7 +17,7 @@
 - ✅ OAuth2 + PKCE yordamida autentifikatsiya
 - ✅ JWT tokenni `iss` va `aud` bo„yicha verify qilish
 - ✅ UI mustaqil – buton va notifikatsiyalarni `renderComponent` orqali berish
-- ✅ `useSSO` hook orqali token va autentifikatsiyani boshqarish
+- ✅ `getDevAgentToken` hook orqali Dev Agent dasturidan token olish
 - ✅ Logout funksiyasi mavjud
 
 ---
@@ -117,6 +117,22 @@ const AppLogout = () => {
     />
   );
 };
+```
+
+---
+
+### 3. `getDevAgentToken` funksiyasi
+
+```tsx
+const {data,error,loading,fetchData} = useDevAgentToken({
+    sso_get_devagent_token_endpoint: "https://sso.xb.uz/api/dev-agent/v1/get-token",
+    dev_agent_getme_sso_endpoint: "http://127.0.0.1:16580/get-me-sso",
+    frontend: "http://localhost:5173",
+})
+
+useEffect(() => {
+    fetchData()
+},[])
 ```
 
 ---

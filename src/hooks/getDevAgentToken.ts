@@ -23,7 +23,7 @@ export function useDevAgentToken({ sso_get_devagent_token_endpoint, dev_agent_ge
         setError(null);
 
         try {
-            const response1 = await fetch(`${sso_get_devagent_token_endpoint}?key=${encodeURIComponent(frontend)}`);
+            const response1 = await fetch(`${sso_get_devagent_token_endpoint}?frontend=${encodeURIComponent(frontend)}`);
             if (!response1.ok) throw new Error("Token olishda xatolik");
             const result1 = await response1.json();
 
